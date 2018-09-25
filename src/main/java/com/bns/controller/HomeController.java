@@ -1,6 +1,9 @@
 package com.bns.controller;
 
+import java.security.Principal;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
@@ -20,15 +23,16 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-
+import com.bns.models.*;
 import com.bns.models.UserAcc;
 import com.bns.models.security.PasswordResetToken;
 import com.bns.models.security.Role;
 import com.bns.models.security.UserRole;
-import com.bns.service.UserService;
+import com.bns.service.*;
 import com.bns.service.impl.UserSecurityService;
 import com.bns.utility.MailConstructor;
 import com.bns.utility.SecurityUtility;
+import com.bns.utility.USConstants;
 
 @Controller
 public class HomeController {
@@ -44,6 +48,20 @@ public class HomeController {
 	
 	@Autowired
 	private UserSecurityService userSecurityService;
+	@Autowired
+	private ProductService productService;
+	
+	@Autowired
+	private UserPaymentService userPaymentService;
+	
+	@Autowired
+	private UserShippingService userShippingService;
+	
+	@Autowired
+	private CartItemService cartItemService;
+	
+	@Autowired
+	private OrderService orderService;
 
 	@RequestMapping("/")
 	public String index() {
@@ -173,4 +191,59 @@ public class HomeController {
 		model.addAttribute("classActiveEdit", true);
 		return "myProfile";
 	}
+
+	
+	@RequestMapping("/orderDetail")
+	public String orderDetail(
+			@RequestParam("id") Long orderId,
+			Principal principal, Model model
+			){
+		UserAcc userAcc = userService.findByUsername(principal.getName());
+		Order order = orderService.findOne(orderId);
+		
+		if(order.getUserAcc().getId()!=userAcc.getId()) {
+			return "badRequestPage";
+		} else {
+			List<CartItem> cartItemList = cartItemService.findByOrder(order);
+			model.addAttribute("cartItemList", cartItemList);
+			model.addAttribute("user", userAcc);
+			model.addAttribute("order", order);
+			
+			model.addAttribute("userPaymentList", userAcc.getUserPaymentList());
+			model.addAttribute("userShippingList", userAcc.getUserShippingList());
+			model.addAttribute("orderList", userAcc.getOrderList());
+			
+			UserShipping userShipping = new UserShipping();
+			model.addAttribute("userShipping", userShipping);
+			
+			List<String> stateList = USConstants.listOfUSStatesCode;
+			Collections.sort(stateList);
+			model.addAttribute("stateList", stateList);
+			
+			model.addAttribute("listOfShippingAddresses", true);
+			model.addAttribute("classActiveOrders", true);
+			model.addAttribute("listOfCreditCards", true);
+			model.addAttribute("displayOrderDetail", true);
+			
+			return "myProfile";
+		}
+	}
+	
+	
+	
+	@RequestMapping("/admin")
+	public String indexAdmin(){
+		return "admin/home";
+	}
+	
+	@RequestMapping("/admin/home")
+	public String homeAdmin(){
+		return "admin/home";
+	}
+	
+	@RequestMapping("/adminlogin")
+	public String logiAdminn(){
+		return "admin/login";
+	}
+
 }

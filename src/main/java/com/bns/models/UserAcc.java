@@ -14,7 +14,7 @@ import javax.persistence.GeneratedValue;
 //import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-
+import javax.persistence.OneToOne;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -50,11 +50,47 @@ public class UserAcc implements UserDetails{
 	private String email;
 	private String phone;
 	private boolean enabled=true;
+	@OneToOne(cascade = CascadeType.ALL, mappedBy = "userAcc")
+	private ShoppingCart shoppingCart;
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userAcc")
+	private List<UserShipping> userShippingList;
+	
+	
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "userAcc")
+	private List<UserPayment> userPaymentList;
+	
+	@OneToMany(mappedBy = "userAcc")
+	private List<Order> orderList;
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<UserRole> userRoles = new HashSet<>();
 	
+	public ShoppingCart getShoppingCart() {
+		return shoppingCart;
+	}
+	public void setShoppingCart(ShoppingCart shoppingCart) {
+		this.shoppingCart = shoppingCart;
+	}
+	public List<UserShipping> getUserShippingList() {
+		return userShippingList;
+	}
+	public void setUserShippingList(List<UserShipping> userShippingList) {
+		this.userShippingList = userShippingList;
+	}
+	public List<UserPayment> getUserPaymentList() {
+		return userPaymentList;
+	}
+	public void setUserPaymentList(List<UserPayment> userPaymentList) {
+		this.userPaymentList = userPaymentList;
+	}
+	public List<Order> getOrderList() {
+		return orderList;
+	}
+	public void setOrderList(List<Order> orderList) {
+		this.orderList = orderList;
+	}
 	public Long getId() {
 		return id;
 	}
