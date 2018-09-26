@@ -3,15 +3,13 @@
 <head th:replace="common/header :: common-header"/>
 
 <body>
-<div th:replace="common/header :: navbar"/>
+<div th:replace="common/header :: navbar"></div>
 
 <div class="container">
     <div class="row" style="margin-bottom: -100px;">
         <div class="col-xs-8">
             <h2 class="section-headline">
-                <h2 class="section-headline">
                     <span th:text="${#strings.toUpperCase(user.username)}"></span>
-                </h2>
             </h2>
         </div>
         <div class="col-xs-4">
@@ -127,6 +125,6 @@
 <!-- end of container -->
 
 
-<div th:replace="common/header :: body-bottom-scripts"/>
+<div th:replace="common/header :: body-bottom-scripts"></div>
 </body>
 </html>
