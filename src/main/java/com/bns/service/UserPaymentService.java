@@ -1,9 +1,11 @@
 package com.bns.service;
 
+import java.util.Optional;
+
 import com.bns.models.UserPayment;
 
 public interface UserPaymentService {
-	UserPayment findById(Long id);
+	Optional<UserPayment> findById(Long id);
 	
 	void removeById(Long id);
 }

@@ -2,6 +2,7 @@ package com.bns.service.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -63,8 +64,9 @@ public class CartItemServiceImpl implements CartItemService{
 		return cartItem;
 	}
 	
-	public CartItem findById(Long id) {
-		return cartItemRepository.findOne(id);
+	
+	public Optional<CartItem> findById(Long id) {
+		return cartItemRepository.findById(id);
 	}
 	
 	public void removeCartItem(CartItem cartItem) {
@@ -79,4 +81,19 @@ public class CartItemServiceImpl implements CartItemService{
 	public List<CartItem> findByOrder(Order order) {
 		return cartItemRepository.findByOrder(order);
 	}
+
+	@Override
+	public void removeCartItem(Optional<CartItem> optional) {
+		productToCartItemRepository.deleteByCartItem(optional.get());
+		cartItemRepository.delete(optional.get());
+		
+	}
+
+	@Override
+	public List<CartItem> findByOrder(Optional<Order> order) {
+		// TODO Auto-generated method stub
+		return cartItemRepository.findByOrder(order.get());
+
+	}
+
 }

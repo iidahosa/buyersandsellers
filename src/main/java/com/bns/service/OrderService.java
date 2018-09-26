@@ -1,5 +1,7 @@
 package com.bns.service;
 
+import java.util.Optional;
+
 import com.bns.models.BillingAddress;
 import com.bns.models.Order;
 import com.bns.models.Payment;
@@ -15,5 +17,6 @@ public interface OrderService {
 			String shippingMethod,
 			UserAcc userAcc);
 	
-	Order findOne(Long id);
+	Optional<Order> findOne(Long id);
 }
+

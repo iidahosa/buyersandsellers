@@ -2,6 +2,7 @@ package com.bns.service.impl;
 
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,9 +37,9 @@ public class OrderServiceImpl implements OrderService{
 		List<CartItem> cartItemList = cartItemService.findByShoppingCart(shoppingCart);
 		
 		for(CartItem cartItem : cartItemList) {
-			Product book = cartItem.getProduct();
+			Product product = cartItem.getProduct();
 			cartItem.setOrder(order);
-			book.setInStockNumber(book.getInStockNumber() - cartItem.getQty());
+			product.setInStockNumber(product.getInStockNumber() - cartItem.getQty());
 		}
 		
 		order.setCartItemList(cartItemList);
@@ -53,8 +54,8 @@ public class OrderServiceImpl implements OrderService{
 		return order;
 	}
 	
-	public Order findOne(Long id) {
-		return orderRepository.findOne(id);
+	public Optional<Order> findOne(Long id) {
+		return orderRepository.findById(id);
 	}
 
 }

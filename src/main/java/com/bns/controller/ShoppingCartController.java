@@ -2,6 +2,7 @@ package com.bns.controller;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,22 +53,22 @@ public class ShoppingCartController {
 
 	@RequestMapping("/addItem")
 	public String addItem(
-			@ModelAttribute("product") Product product,
+			@ModelAttribute("product") Optional<Product> product,
 			@ModelAttribute("qty") String qty,
 			Model model, Principal principal
 			) {
 		UserAcc user = userService.findByUsername(principal.getName());
-		product = productService.findOne(product.getId());
+		product = productService.findOne(product.get().getId());
 		
-		if (Integer.parseInt(qty) > product.getInStockNumber()) {
+		if (Integer.parseInt(qty) > product.get().getInStockNumber()) {
 			model.addAttribute("notEnoughStock", true);
-			return "forward:/productDetail?id="+product.getId();
+			return "forward:/productDetail?id="+product.get().getId();
 		}
 		
-		CartItem cartItem = cartItemService.addProductToCartItem(product, user, Integer.parseInt(qty));
+		CartItem cartItem = cartItemService.addProductToCartItem(product.get(), user, Integer.parseInt(qty));
 		model.addAttribute("addBookSuccess", true);
 		
-		return "forward:/productDetail?id="+product.getId();
+		return "forward:/productDetail?id="+product.get().getId();
 	}
 	
 	@RequestMapping("/updateCartItem")
@@ -75,9 +76,9 @@ public class ShoppingCartController {
 			@ModelAttribute("id") Long cartItemId,
 			@ModelAttribute("qty") int qty
 			) {
-		CartItem cartItem = cartItemService.findById(cartItemId);
-		cartItem.setQty(qty);
-		cartItemService.updateCartItem(cartItem);
+		Optional<CartItem> cartItem = cartItemService.findById(cartItemId);
+		cartItem.get().setQty(qty);
+		cartItemService.updateCartItem(cartItem.get());
 		
 		return "forward:/shoppingCart/cart";
 	}

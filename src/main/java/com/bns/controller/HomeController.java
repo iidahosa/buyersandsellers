@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.bns.models.*;
-import com.bns.models.UserAcc;
 import com.bns.models.security.PasswordResetToken;
 import com.bns.models.security.Role;
 import com.bns.models.security.UserRole;
@@ -199,9 +199,9 @@ public class HomeController {
 			Principal principal, Model model
 			){
 		UserAcc userAcc = userService.findByUsername(principal.getName());
-		Order order = orderService.findOne(orderId);
+		Optional<Order> order = orderService.findOne(orderId);
 		
-		if(order.getUserAcc().getId()!=userAcc.getId()) {
+		if(order.get().getUserAcc().getId()!=userAcc.getId()) {
 			return "badRequestPage";
 		} else {
 			List<CartItem> cartItemList = cartItemService.findByOrder(order);

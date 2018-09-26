@@ -1,5 +1,6 @@
 package com.bns.service;
 
+import java.util.Optional;
 import java.util.Set;
 
 import com.bns.models.UserAcc;
@@ -18,7 +19,7 @@ public interface UserService {
 	
 	UserAcc findByEmail (String email);
 
-	UserAcc findById(Long id);
+	Optional<UserAcc> findById(Long id);
 	
 	UserAcc createUser(UserAcc user, Set<UserRole> userRoles) throws Exception;
 	

@@ -2,6 +2,7 @@ package com.bns.service.impl;
 
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -128,9 +129,9 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public UserAcc findById(Long id) {
+	public  Optional<UserAcc> findById(Long id) {
 		// TODO Auto-generated method stub
-		return null;
+		return userRepository.findById(id);
 	}
 	
 	

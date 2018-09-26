@@ -1,6 +1,7 @@
 package com.bns.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.bns.models.Product;
 import com.bns.models.CartItem;
@@ -15,11 +16,11 @@ public interface CartItemService {
 	
 	CartItem addProductToCartItem(Product product, UserAcc userAcc, int qty);
 	
-	CartItem findById(Long id);
+	Optional<CartItem> findById(Long id);
 	
-	void removeCartItem(CartItem cartItem);
+	void removeCartItem(Optional<CartItem> optional);
 	
 	CartItem save(CartItem cartItem);
 	
-	List<CartItem> findByOrder(Order order);
+	List<CartItem> findByOrder(Optional<Order> order);
 }

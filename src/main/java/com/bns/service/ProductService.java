@@ -1,13 +1,14 @@
 package com.bns.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.bns.models.*;
 
 public interface ProductService {
 	List<Product> findAll ();
 	
-	Product findOne(Long id);
+	Optional<Product> findOne(Long id);
 	
 	List<Product> findByCategory(String category);
 	

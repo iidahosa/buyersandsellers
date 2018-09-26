@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -196,12 +197,13 @@ public class CheckoutController {
 	public String setShippingAddress(@RequestParam("userShippingId") Long userShippingId, Principal principal,
 			Model model) {
 		UserAcc user = userService.findByUsername(principal.getName());
-		UserShipping userShipping = userShippingService.findById(userShippingId);
+		Optional<UserShipping> userShipping = userShippingService.findById(userShippingId);
 
-		if (userShipping.getUserAcc().getId() != user.getId()) {
+		if (userShipping.get().getUserAcc().getId() != user.getId()) {
+			
 			return "badRequestPage";
 		} else {
-			shippingAddressService.setByUserShipping(userShipping, shippingAddress);
+			shippingAddressService.setByUserShipping(userShipping.get(), shippingAddress);
 
 			List<CartItem> cartItemList = cartItemService.findByShoppingCart(user.getShoppingCart());
 
@@ -241,13 +243,13 @@ public class CheckoutController {
 	public String setPaymentMethod(@RequestParam("userPaymentId") Long userPaymentId, Principal principal,
 			Model model) {
 		UserAcc user = userService.findByUsername(principal.getName());
-		UserPayment userPayment = userPaymentService.findById(userPaymentId);
-		UserBilling userBilling = userPayment.getUserBilling();
+		Optional<UserPayment> userPayment = userPaymentService.findById(userPaymentId);
+		UserBilling userBilling = userPayment.get().getUserBilling();
 
-		if (userPayment.getUserAcc().getId() != user.getId()) {
+		if (userPayment.get().getUserAcc().getId() != user.getId()) {
 			return "badRequestPage";
 		} else {
-			paymentService.setByUserPayment(userPayment, payment);
+			paymentService.setByUserPayment(userPayment.get(), payment);
 
 			List<CartItem> cartItemList = cartItemService.findByShoppingCart(user.getShoppingCart());
 

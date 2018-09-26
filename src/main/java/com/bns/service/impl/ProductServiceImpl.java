@@ -2,6 +2,7 @@ package com.bns.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,19 +18,19 @@ public class ProductServiceImpl implements ProductService{
 	
 	public List<Product> findAll() {
 		List<Product> ProductList = (List<Product>) productRepository.findAll();
-		List<Product> activeBookList = new ArrayList<>();
+		List<Product> activeProductList = new ArrayList<>();
 		
 		for (Product product: ProductList) {
 			if(product.isActive()) {
-				activeBookList.add(product);
+				activeProductList.add(product);
 			}
 		}
 		
-		return activeBookList;
+		return activeProductList;
 	}
 	
-	public Product findOne(Long id) {
-		return productRepository.findOne(id);
+	public Optional<Product> findOne(Long id) {
+		return productRepository.findById(id);
 	}
 
 	public List<Product> findByCategory(String category){
@@ -48,14 +49,14 @@ public class ProductServiceImpl implements ProductService{
 	
 	public List<Product> blurrySearch(String title) {
 		List<Product> productList = productRepository.findByTitleContaining(title);
-List<Product> activeBookList = new ArrayList<>();
+List<Product> activeProductList = new ArrayList<>();
 		
-		for (Product book: productList) {
-			if(book.isActive()) {
-				activeBookList.add(book);
+		for (Product product: productList) {
+			if(product.isActive()) {
+				activeProductList.add(product);
 			}
 		}
 		
-		return activeBookList;
+		return activeProductList;
 	}
 }
